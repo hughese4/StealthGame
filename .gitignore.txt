@@ -1,0 +1,36 @@
+# This is a Git ignore file for Unity
+
+# This is needed to avoid committing the Library folder
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+
+# Visual Studio files
+*.csproj
+*.sln
+*.userprefs
+
+# Rider files
+.idea/
+*.sln
+
+# Mac files
+.DS_Store
+
+# Thumbnails
+*.tif
+*.tiff
+*.png
+
+# Unity-specific files
+*.pidb
+*.userprefs
+*.sln
+*.suo
+*.user
+*.log
+*.tmp
+*.pidb.meta
