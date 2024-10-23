@@ -352,11 +352,13 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 -analyzer:"E:/Unity/2022.3.35f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"E:/Unity/2022.3.35f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
-"Assets/GameManager.cs"
-"Assets/GameUI.cs"
+"Assets/CameraFollow.cs"
+"Assets/Chaser.cs"
+"Assets/GameController.cs"
 "Assets/Guard.cs"
 "Assets/HighAlertGuard.cs"
 "Assets/MainMenuManager.cs"
+"Assets/PersistentEventSystem.cs"
 "Assets/Player.cs"
 -langversion:9.0
 /deterministic

@@ -23,7 +23,7 @@ public class Guard : MonoBehaviour {
     public Transform pathHolder;
 
     protected virtual void Start() {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        StartCoroutine(FindPlayerAfterDelay());
         viewAngle = spotlight.spotAngle;
         originalSpotlightColor = spotlight.color;
 
@@ -33,7 +33,12 @@ public class Guard : MonoBehaviour {
             waypoints[i] = new Vector3(waypoints[i].x, transform.position.y, waypoints[i].z);
         }
 
-        StartCoroutine(FollowPath(waypoints));
+        // Select a random waypoint index as the starting point
+        int randomWaypointIndex = Random.Range(0, waypoints.Length);
+        transform.position = waypoints[randomWaypointIndex];
+
+        // Start following the path from the next waypoint
+        StartCoroutine(FollowPath(waypoints, (randomWaypointIndex + 1) % waypoints.Length));
     }
 
     protected virtual void Update() {
@@ -53,8 +58,31 @@ public class Guard : MonoBehaviour {
         }
     }
 
+    IEnumerator FindPlayerAfterDelay() {
+        yield return new WaitForSeconds(0.1f);  // Short delay
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+
+        if (player == null) {
+            Debug.LogError("Player not found!");
+        }
+    }
+
     protected virtual void HandlePlayerSpotted() {
+        // Calculate the distance between the guard and the player as a percentage of viewDistance
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        float distancePercentage = distanceToPlayer / viewDistance;
+
+        // If the player is within the closest 25 % of the view distance, reduce the time to spot
+        if (distancePercentage <= 0.25f) {
+            timeToSpotPlayer = 0.1f;  // Set spotting time to 0.1 seconds if very close
+        } else if(distancePercentage > 0.25f && distancePercentage <= 0.75) {
+            timeToSpotPlayer = 0.4f;
+        } else {
+            timeToSpotPlayer = 1.0f;
+        }
+
         playerVisibleTimer += Time.deltaTime;
+    
     }
 
     protected bool CanSeePlayer() {
@@ -70,10 +98,8 @@ public class Guard : MonoBehaviour {
         return false;
     }
 
-    protected IEnumerator FollowPath(Vector3[] waypoints) {
-        transform.position = waypoints[0];
-
-        int targetWaypointIndex = 1;
+    protected IEnumerator FollowPath(Vector3[] waypoints, int startingWaypointIndex) {
+        int targetWaypointIndex = startingWaypointIndex;
         Vector3 targetWaypoint = waypoints[targetWaypointIndex];
         transform.LookAt(targetWaypoint);
 
